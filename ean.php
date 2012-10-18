@@ -114,7 +114,7 @@ function encode($number)
       {
          for($i=1;$i<=strlen($bar);$i++)
          {
-            if(substr($bar, $i, 1)==='1')
+            if(substr($bar, $i-1, 1)==='1')
                imagefilledrectangle($image, $x, MAX, $x+WIDTH, FLOOR+20, $bar_color);
             $x += WIDTH;
          }
@@ -122,7 +122,7 @@ function encode($number)
       }
       for($i=1;$i<=strlen($bar);$i++)
       {
-         if(substr($bar, $i, 1)==='1')
+         if(substr($bar, $i-1, 1)==='1')
             imagefilledrectangle($image, $x, MAX, $x+WIDTH, FLOOR, $bar_color);
          $x += WIDTH;
       }
@@ -131,7 +131,6 @@ function encode($number)
    //echo '<pre>';
    //print_r($barcode);
    //echo '</pre>';
-
 
    header("Content-Type: image/png; name=\"barcode.png\"");
    imagepng($image);
