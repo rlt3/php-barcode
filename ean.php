@@ -1,5 +1,4 @@
 <?php
-
 function encode($number)
 {
    $parity = array(
@@ -106,24 +105,24 @@ function encode($number)
    $x = 25;
    $y = 100;
 
-   // if digit is zero, then just add the width, don't draw
+   /**
+    * For each encoded number (a binary number, e.g. 6 => "0000101")
+    * draw a bar for '1', leave blank for 0;
+    *
+    * For the guards, draw a taller bar.
+    */
 
    foreach($barcode as $bar)
    {
+      $tall = 0;
+
       if(strlen($bar)==3 || strlen($bar)==5)
-      {
-         for($i=1;$i<=strlen($bar);$i++)
-         {
-            if(substr($bar, $i-1, 1)==='1')
-               imagefilledrectangle($image, $x, MAX, $x+WIDTH, FLOOR+20, $bar_color);
-            $x += WIDTH;
-         }
-         continue;
-      }
+         $tall = 40;
+
       for($i=1;$i<=strlen($bar);$i++)
       {
          if(substr($bar, $i-1, 1)==='1')
-            imagefilledrectangle($image, $x, MAX, $x+WIDTH, FLOOR, $bar_color);
+            imagefilledrectangle($image, $x, MAX, $x+WIDTH, FLOOR+$tall, $bar_color);
          $x += WIDTH;
       }
    }
