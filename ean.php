@@ -98,6 +98,7 @@ function encode($number)
    $bar_color=ImageColorAllocate($image, 0x00, 0x00, 0x00);
    $text_color=ImageColorAllocate($image, 0x00, 0x00, 0x00);
 
+
    define("MAX", 25);
    define("FLOOR", 100);
    define("WIDTH", 4);
@@ -125,6 +126,22 @@ function encode($number)
             imagefilledrectangle($image, $x, MAX, $x+WIDTH, FLOOR+$tall, $bar_color);
          $x += WIDTH;
       }
+   }
+
+   /**
+    * Draw the text
+    */
+
+   $x = 25;
+   $y = 100;
+
+   $font=dirname(__FILE__)."/"."FreeSansBold.ttf";
+
+   for($i=0;$i<strlen($number);$i++)
+   {
+      $fontsize = 12;
+      imagettftext($image, $fontsize, 0, $x, $y+60, $text_color, $font, $number[$i]);
+      $x += 25;
    }
 
    //echo '<pre>';
