@@ -73,10 +73,7 @@ function encode($number)
     */
 
    $key = $parity[substr($number, 0, 1)];
-   $checksum = ean_checksum($number);
-   $number .= $checksum;
-
-   echo $checksum;
+   $number .= ean_checksum($number);
 
    $barcode[] = $guard['start'];
 
@@ -142,45 +139,32 @@ function encode($number)
     * if $i%6 == 0, add some width
     */
 
-   //define("TEXT_MAX", );
-   //define("TEXT_FLOOR", );
-   //define("TEXT_WIDTH", );
-
    $x = $width*0.12;
    $y = $height*0.95;
 
    $font=dirname(__FILE__)."/"."FreeSansBold.ttf";
    $fontsize = $scale*(6);
-   $kerning = $fontsize*0.75;
+   $kerning = $fontsize*0.8;
 
    for($i=0;$i<strlen($number);$i++)
    {
       imagettftext($image, $fontsize, 0, $x, $y, $text_color, $font, $number[$i]);
       if($i==0 || $i==6)
-         $x += $kerning*2;
+         $x += $kerning*1.5;
       $x += $kerning;
    }
 
-   //echo '<pre>';
-   //echo $number, "\n";
-   //echo strlen($number), "\n";
-   //print_r($barcode);
-   //echo '</pre>';
-
-   //header("Content-Type: image/png; name=\"barcode.png\"");
-   //imagepng($image);
+   header("Content-Type: image/png; name=\"barcode.png\"");
+   imagepng($image);
    imagedestroy($image);
 }
 
-function ean_checksum($ean)
-{
-   echo $ean, '<br>';
+function ean_checksum($ean){
   $ean=(string)$ean;
-  $esum=0; $osum=0;
-  for ($i=strlen($ean)-1;$i>=0;$i--)
-  {
-     if ($i%2==0) $esum+=$ean[$i];
-     else $osum+=$ean[$i];
+  $even=true; $esum=0; $osum=0;
+  for ($i=strlen($ean)-1;$i>=0;$i--){
+	if ($even) $esum+=$ean[$i];	else $osum+=$ean[$i];
+	$even=!$even;
   }
   return (10-((3*$esum+$osum)%10))%10;
 }
@@ -190,4 +174,5 @@ function random()
   return substr(number_format(time() * rand(),0,'',''),0,12);
 }
 
-encode(random());
+encode(123456789012);
+//encode(random());
