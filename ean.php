@@ -62,7 +62,6 @@ function encode($number)
              'end' => "101",
                  );
 
-
    /**
     * The following incantations use the parity key (based off the 
     * first digit of the unencoded number) to encode the first six
@@ -74,6 +73,7 @@ function encode($number)
     */
 
    $key = $parity[substr($number, 0, 1)];
+   $number .= ean_checksum($number);
 
    $barcode[] = $guard['start'];
 
@@ -89,8 +89,10 @@ function encode($number)
 
    $barcode[] = $guard['end'];
 
-   $width = 800;
-   $height = 200;
+   $scale = 8;
+
+   $height = $scale*60;
+   $width  = 1.5*$height;
 
    $image = imagecreate($width, $height);
 
@@ -98,12 +100,11 @@ function encode($number)
    $bar_color=ImageColorAllocate($image, 0x00, 0x00, 0x00);
    $text_color=ImageColorAllocate($image, 0x00, 0x00, 0x00);
 
+   define("MAX", $height*0.05);
+   define("FLOOR", $height*0.8);
+   define("WIDTH", $scale*0.8);
 
-   define("MAX", 25);
-   define("FLOOR", 100);
-   define("WIDTH", 4);
-
-   $x = 25;
+   $x = $height*0.10;
    $y = 100;
 
    /**
@@ -118,7 +119,7 @@ function encode($number)
       $tall = 0;
 
       if(strlen($bar)==3 || strlen($bar)==5)
-         $tall = 40;
+         $tall = ($scale*10);
 
       for($i=1;$i<=strlen($bar);$i++)
       {
@@ -130,6 +131,12 @@ function encode($number)
 
    /**
     * Draw the text
+    *
+    * For the 1st digit, needs to be on the left of the first guard.
+    *
+    * Next 6 digits are in the first area. Next 6 in the next;
+    *
+    * if $i%6 == 0, add some width
     */
 
    $x = 25;
@@ -139,7 +146,7 @@ function encode($number)
 
    for($i=0;$i<strlen($number);$i++)
    {
-      $fontsize = 12;
+      $fontsize = $scale*(12/1.8);
       imagettftext($image, $fontsize, 0, $x, $y+60, $text_color, $font, $number[$i]);
       $x += 25;
    }
@@ -151,6 +158,19 @@ function encode($number)
    header("Content-Type: image/png; name=\"barcode.png\"");
    imagepng($image);
    imagedestroy($image);
+}
+
+function ean_checksum($ean)
+{
+   $esum=0; $osum=0;
+   for ($i=strlen($ean)-1;$i>=0;$i--)
+   {
+      if (i%2==0) 
+         $esum+=$ean[$i];	
+      else 
+         $osum+=$ean[$i];
+   }
+   return (10-((3*$esum+$osum)%10))%10;
 }
 
 function random()
