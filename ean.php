@@ -90,14 +90,10 @@ function encode($number)
 
    $barcode[] = $guard['end'];
 
-   //echo '<pre>';
-   //print_r($barcode);
-   //echo '</pre>';
+   $width = 800;
+   $height = 200;
 
-   $x = 800;
-   $y = 200;
-
-   $image = imagecreate($x, $y);
+   $image = imagecreate($width, $height);
 
    $bg_color=ImageColorAllocate($image, 0xFF, 0xFF, 0xFF);
    $bar_color=ImageColorAllocate($image, 0x00, 0x00, 0x00);
@@ -105,7 +101,7 @@ function encode($number)
 
    define("MAX", 25);
    define("FLOOR", 100);
-   define("WIDTH", 7);
+   define("WIDTH", 4);
 
    $x = 25;
    $y = 100;
@@ -114,6 +110,16 @@ function encode($number)
 
    foreach($barcode as $bar)
    {
+      if(strlen($bar)==3 || strlen($bar)==5)
+      {
+         for($i=1;$i<=strlen($bar);$i++)
+         {
+            if(substr($bar, $i, 1)==='1')
+               imagefilledrectangle($image, $x, MAX, $x+WIDTH, FLOOR+20, $bar_color);
+            $x += WIDTH;
+         }
+         continue;
+      }
       for($i=1;$i<=strlen($bar);$i++)
       {
          if(substr($bar, $i, 1)==='1')
@@ -122,8 +128,14 @@ function encode($number)
       }
    }
 
+   //echo '<pre>';
+   //print_r($barcode);
+   //echo '</pre>';
+
+
    header("Content-Type: image/png; name=\"barcode.png\"");
    imagepng($image);
+   imagedestroy($image);
 }
 
 function random()
