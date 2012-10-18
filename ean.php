@@ -103,16 +103,20 @@ function encode($number)
    $bar_color=ImageColorAllocate($image, 0x00, 0x00, 0x00);
    $text_color=ImageColorAllocate($image, 0x00, 0x00, 0x00);
 
-   $width = 25;
-   $height = 100;
+   define("MAX", 25);
+   define("FLOOR", 100);
+   define("WIDTH", 15);
+
+   $x = 25;
+   $y = 100;
 
    // if digit is zero, then just add the width, don't draw
 
    //foreach($barcode as $bar)
    //{
-      imagefilledrectangle($image, $width, $height, 20, 20, $bar_color);
-      $width += 20;
-      //$height += 20;
+      imagefilledrectangle($image, $x, MAX, $x+WIDTH, FLOOR, $bar_color);
+      $x += WIDTH;
+      imagefilledrectangle($image, $x, MAX, $x+WIDTH, FLOOR, $bar_color);
    //}
 
    header("Content-Type: image/png; name=\"barcode.png\"");
