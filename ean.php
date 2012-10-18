@@ -77,7 +77,7 @@ function encode($number)
 
    $barcode[] = $guard['start'];
 
-   for($i=1;$i<=strlen($number);$i++)
+   for($i=1;$i<=strlen($number)-1;$i++)
    {
       if($i<7)
          $barcode[] = $left[$key[$i-1]][substr($number, $i, 1)];
@@ -92,7 +92,7 @@ function encode($number)
    $scale = 8;
 
    $height = $scale*60;
-   $width  = 1.5*$height;
+   $width  = 1.6*$height;
 
    $image = imagecreate($width, $height);
 
@@ -104,7 +104,7 @@ function encode($number)
    define("FLOOR", $height*0.8);
    define("WIDTH", $scale*0.8);
 
-   $x = $height*0.10;
+   $x = $height*0.20;
    $y = 100;
 
    /**
@@ -139,19 +139,27 @@ function encode($number)
     * if $i%6 == 0, add some width
     */
 
-   $x = 25;
-   $y = 100;
+   //define("TEXT_MAX", );
+   //define("TEXT_FLOOR", );
+   //define("TEXT_WIDTH", );
+
+   $x = $width*0.05;
+   $y = $height*0.825;
 
    $font=dirname(__FILE__)."/"."FreeSansBold.ttf";
 
-   for($i=0;$i<strlen($number);$i++)
-   {
-      $fontsize = $scale*(12/1.8);
-      imagettftext($image, $fontsize, 0, $x, $y+60, $text_color, $font, $number[$i]);
-      $x += 25;
-   }
+   //for($i=0;$i<strlen($number);$i++)
+   //{
+   //   $fontsize = $scale*(12/2);
+   //   imagettftext($image, $fontsize, 0, $x, $y+60, $text_color, $font, $number[$i]);
+   //   if($i==0 || $i==6)
+   //      $x += 50;
+   //   $x += 43;
+   //}
 
    //echo '<pre>';
+   //echo $number, "\n";
+   //echo strlen($number), "\n";
    //print_r($barcode);
    //echo '</pre>';
 
