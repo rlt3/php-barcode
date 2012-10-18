@@ -89,7 +89,7 @@ function encode($number)
 
    $barcode[] = $guard['end'];
 
-   $scale = 8;
+   $scale = 6;
 
    $height = $scale*60;
    $width  = 1.6*$height;
@@ -104,7 +104,7 @@ function encode($number)
    define("FLOOR", $height*0.8);
    define("WIDTH", $scale*0.8);
 
-   $x = $height*0.20;
+   $x = $height*0.30;
    $y = 100;
 
    /**
@@ -143,19 +143,20 @@ function encode($number)
    //define("TEXT_FLOOR", );
    //define("TEXT_WIDTH", );
 
-   $x = $width*0.05;
-   $y = $height*0.825;
+   $x = $width*0.12;
+   $y = $height*0.95;
 
    $font=dirname(__FILE__)."/"."FreeSansBold.ttf";
 
-   //for($i=0;$i<strlen($number);$i++)
-   //{
-   //   $fontsize = $scale*(12/2);
-   //   imagettftext($image, $fontsize, 0, $x, $y+60, $text_color, $font, $number[$i]);
-   //   if($i==0 || $i==6)
-   //      $x += 50;
-   //   $x += 43;
-   //}
+   for($i=0;$i<strlen($number);$i++)
+   {
+      $fontsize = $scale*(6);
+      $kerning = $fontsize*0.75;
+      imagettftext($image, $fontsize, 0, $x, $y, $text_color, $font, $number[$i]);
+      if($i==0 || $i==6)
+         $x += $kerning*2;
+      $x += $kerning;
+   }
 
    //echo '<pre>';
    //echo $number, "\n";
