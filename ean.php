@@ -103,18 +103,25 @@ function encode($number)
    $bar_color=ImageColorAllocate($image, 0x00, 0x00, 0x00);
    $text_color=ImageColorAllocate($image, 0x00, 0x00, 0x00);
 
-   $width = 20;
-   $height = 20;
+   $width = 25;
+   $height = 100;
 
-   foreach($barcode as $bar)
-   {
+   // if digit is zero, then just add the width, don't draw
+
+   //foreach($barcode as $bar)
+   //{
       imagefilledrectangle($image, $width, $height, 20, 20, $bar_color);
       $width += 20;
-      $height += 20;
-   }
+      //$height += 20;
+   //}
 
    header("Content-Type: image/png; name=\"barcode.png\"");
    imagepng($image);
 }
 
-encode(1234567890123);
+function random()
+{
+  return substr(number_format(time() * rand(),0,'',''),0,12);
+}
+
+encode(random());
