@@ -105,19 +105,22 @@ function encode($number)
 
    define("MAX", 25);
    define("FLOOR", 100);
-   define("WIDTH", 15);
+   define("WIDTH", 7);
 
    $x = 25;
    $y = 100;
 
    // if digit is zero, then just add the width, don't draw
 
-   //foreach($barcode as $bar)
-   //{
-      imagefilledrectangle($image, $x, MAX, $x+WIDTH, FLOOR, $bar_color);
-      $x += WIDTH;
-      imagefilledrectangle($image, $x, MAX, $x+WIDTH, FLOOR, $bar_color);
-   //}
+   foreach($barcode as $bar)
+   {
+      for($i=1;$i<=strlen($bar);$i++)
+      {
+         if(substr($bar, $i, 1)==='1')
+            imagefilledrectangle($image, $x, MAX, $x+WIDTH, FLOOR, $bar_color);
+         $x += WIDTH;
+      }
+   }
 
    header("Content-Type: image/png; name=\"barcode.png\"");
    imagepng($image);
