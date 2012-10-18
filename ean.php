@@ -16,6 +16,7 @@ function encode($number)
                   );
 
    $left = array(
+            // Odd Encoding
             0 => array (
                   0 => "0001101",
                   1 => "0011001",
@@ -28,6 +29,7 @@ function encode($number)
                   8 => "0110111",
                   9 => "0001011"
                        ),
+            // Even Encoding
             1 => array (
                   0 => "0100111",
                   1 => "0110011",
@@ -61,10 +63,6 @@ function encode($number)
              'end' => "101",
                  );
 
-   $key = $parity[substr($number, 0, 1)];
-   echo $number, '<br>';
-   echo $key, '<br>';
-   echo strlen($number), '<br>';
 
    /**
     * The following incantations use the parity key (based off the 
@@ -76,17 +74,47 @@ function encode($number)
     * third uses odd, and so on.
     */
 
-   $barcode = $guard['start'];
+   $key = $parity[substr($number, 0, 1)];
+
+   $barcode[] = $guard['start'];
+
    for($i=1;$i<=strlen($number);$i++)
    {
       if($i<7)
-         $barcode .= $left[$key[$i-1]][substr($number, $i, 1)];
+         $barcode[] = $left[$key[$i-1]][substr($number, $i, 1)];
       else
-         $barcode .= $right[substr($number, $i, 1)];
+         $barcode[] = $right[substr($number, $i, 1)];
+      if($i==6)
+         $barcode[] = $guard['middle'];
    }
-   $barcode .= $guard['end'];
 
-   echo '<br>', $barcode, '<br>';
+   $barcode[] = $guard['end'];
+
+   //echo '<pre>';
+   //print_r($barcode);
+   //echo '</pre>';
+
+   $x = 800;
+   $y = 200;
+
+   $image = imagecreate($x, $y);
+
+   $bg_color=ImageColorAllocate($image, 0xFF, 0xFF, 0xFF);
+   $bar_color=ImageColorAllocate($image, 0x00, 0x00, 0x00);
+   $text_color=ImageColorAllocate($image, 0x00, 0x00, 0x00);
+
+   $width = 20;
+   $height = 20;
+
+   foreach($barcode as $bar)
+   {
+      imagefilledrectangle($image, $width, $height, 20, 20, $bar_color);
+      $width += 20;
+      $height += 20;
+   }
+
+   header("Content-Type: image/png; name=\"barcode.png\"");
+   imagepng($image);
 }
 
 encode(1234567890123);
