@@ -173,6 +173,3 @@ function random()
 {
   return substr(number_format(time() * rand(),0,'',''),0,12);
 }
-
-encode(123456789012);
-//encode(random());
