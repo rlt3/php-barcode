@@ -92,7 +92,7 @@ function encode($number)
    $scale = 6;
 
    $height = $scale*60;
-   $width  = 1.6*$height;
+   $width  = 1.8*$height;
 
    $image = imagecreate($width, $height);
 
@@ -100,11 +100,11 @@ function encode($number)
    $bar_color=ImageColorAllocate($image, 0x00, 0x00, 0x00);
    $text_color=ImageColorAllocate($image, 0x00, 0x00, 0x00);
 
-   define("MAX", $height*0.05);
-   define("FLOOR", $height*0.8);
-   define("WIDTH", $scale*0.8);
+   define("MAX", $height*0.025);
+   define("FLOOR", $height*0.825);
+   define("WIDTH", $scale);
 
-   $x = $height*0.30;
+   $x = ($height*0.2)-WIDTH;
    $y = 100;
 
    /**
@@ -119,7 +119,7 @@ function encode($number)
       $tall = 0;
 
       if(strlen($bar)==3 || strlen($bar)==5)
-         $tall = ($scale*10);
+         $tall = ($height*0.15);
 
       for($i=1;$i<=strlen($bar);$i++)
       {
@@ -139,18 +139,20 @@ function encode($number)
     * if $i%6 == 0, add some width
     */
 
-   $x = $width*0.12;
+   $x = $width*0.05;
    $y = $height*0.95;
 
    $font=dirname(__FILE__)."/"."FreeSansBold.ttf";
    $fontsize = $scale*(6);
-   $kerning = $fontsize*0.8;
+   $kerning = $fontsize*1.025;
 
    for($i=0;$i<strlen($number);$i++)
    {
       imagettftext($image, $fontsize, 0, $x, $y, $text_color, $font, $number[$i]);
       if($i==0 || $i==6)
-         $x += $kerning*1.5;
+         $x += $kerning*1;
+      if($i==6)
+         $x += $kerning*0.5;
       $x += $kerning;
    }
 
