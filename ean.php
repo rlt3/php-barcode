@@ -168,8 +168,3 @@ function ean_checksum($ean){
   }
   return (10-((3*$esum+$osum)%10))%10;
 }
-
-function random()
-{
-  return substr(number_format(time() * rand(),0,'',''),0,12);
-}
