@@ -140,18 +140,16 @@ function encode($number)
     */
 
    $x = $width*0.05;
-   $y = $height*0.95;
+   $y = $height*0.96;
 
    $font=dirname(__FILE__)."/"."FreeSansBold.ttf";
-   $fontsize = $scale*(6);
-   $kerning = $fontsize*1.025;
+   $fontsize = $scale*(7);
+   $kerning = $fontsize*1;
 
    for($i=0;$i<strlen($number);$i++)
    {
       imagettftext($image, $fontsize, 0, $x, $y, $text_color, $font, $number[$i]);
       if($i==0 || $i==6)
-         $x += $kerning*1;
-      if($i==6)
          $x += $kerning*0.5;
       $x += $kerning;
    }
