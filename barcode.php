@@ -19,4 +19,4 @@ class Barcode
    }
 }
 
-new Barcode();
+new Barcode($_GET['code']);
