@@ -19,4 +19,5 @@ class Barcode
    }
 }
 
-new Barcode($_GET['code']);
+$number = (isset($_GET['code'])) ? $_GET['code'] : null;
+new Barcode($number);
