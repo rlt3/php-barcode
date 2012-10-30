@@ -1,23 +1,38 @@
 <?php
+//autoload
 include("ean.php");
 
 class Barcode
 {
-   public $code;
-   public $type;
+   public $number;
+   public $encoding;
+   public $scale;
 
-   function __construct($code=null, $type='EAN-13')
+   protected $_encoder;
+
+   function __construct($encoding, $number=null, $scale=null)
    {
-      $this->code = (isset($code)) ? $code : self::randomCode();
+      $this->number = ($number==null) ? $this->_random() : $number;
+      $this->scale = ($scale==null || $scale<4) ? 4 : $scale;
 
-      encode($this->code);
+      // Reflection Class : Method
+
+      $this->_encoder = new EAN13($this->number, $this->scale);
    }
 
-   private static function randomCode()
+   function __destruct()
+   {
+      $this->_encoder->display();
+   }
+
+   private function _random()
    {
      return substr(number_format(time() * rand(),0,'',''),0,12);
    }
 }
 
-$number = (isset($_GET['code'])) ? $_GET['code'] : null;
-new Barcode($number);
+$encoding = (isset($_GET['encoding'])) ? $_GET['encoding'] : 'EAN-13';
+$number   = (isset($_GET['code']))     ? $_GET['code']     : null;
+$scale    = (isset($_GET['scale']))    ? $_GET['scale']    : null;
+
+new Barcode($encoding, $number, $scale);
