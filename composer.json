@@ -1,0 +1,13 @@
+{
+    "name": "rlt3/php-barcode",
+    "type": "library",
+    "description": "This is a re-working of php-barcode by Folke Ashberg, for creating EAN-13 barcodes.",
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "rlt3\\Barcode\\": ""
+        }
+    }
+}
