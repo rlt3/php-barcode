@@ -241,4 +241,18 @@ class Barcode
       header("Content-Type: image/png; name=\"barcode.png\"");
       imagepng($this->_image);
    }
+
+   /**
+    * save image
+    * If it does not exist, the directory creates it with the appropriate permissions:
+    *      RW-R--R--
+    */
+   public function save($path = 'barcode.png')
+   {
+      $dir = dirname($path);
+      if (!file_exists($dir)) {
+           mkdir($dir, 0644, true);
+      }
+      imagepng($this->_image, $path);
+   }
 }
